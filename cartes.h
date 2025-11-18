@@ -1,6 +1,16 @@
-#ifndef CARTES_H
-#define CARTES_H
+#pragma once
 
-// Vide pour le moment
+#define MAX_CARTES 108
 
-#endif
+enum Couleur { ROUGE, JAUNE, BLEU, VERT, NOIR };
+
+enum TypeCarte { CHIFFRE, PLUS2, INVERSION, PASSER, JOKER, PLUS4 };
+
+typedef struct {
+    enum TypeCarte type;
+    enum Couleur couleur;
+    int valeur;
+} Carte;
+
+void afficher_carte(Carte c);
+
