@@ -1,6 +1,12 @@
-#ifndef JOUEUR_H
-#define JOUEUR_H
+#pragma once         
+#include "cartes.h"
 
-// Vide pour l'instant
+typedef struct {
+    Carte main[30];
+    int nbCartes;
+} Joueur;
 
-#endif
+void ajouter_carte(Joueur *j, Carte c);
+
+void afficher_main(Joueur j);
+
