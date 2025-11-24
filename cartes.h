@@ -1,11 +1,6 @@
 #pragma once
 
-#define MAX_CARTES 108
-
-#define MAX_ROUGE 19
-#define MAX_VERT 19
-#define MAX_JAUNE 19
-#define MAX_BLEU 19
+#define MAX_COULEUR 76
 #define MAX_PLUS2 8
 #define MAX_INVERSION 8
 #define MAX_PASSER 8
