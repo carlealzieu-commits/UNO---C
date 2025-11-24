@@ -3,7 +3,7 @@
 
 
 void ajouter_carte(Joueur *j, Carte c) {
-    j->main[j->nbCartes] = c;  // notation -> remplace le (*j)
+    j->main[j->nbCartes] = c; 
     j->nbCartes++;             
 }
 
