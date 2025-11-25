@@ -15,7 +15,10 @@
 #define MAX_PLUS4 4
 
 Carte mainJoueur[108];
+Carte mainBot[108];
+
 int nCartesJ = 0; 
+int nCartesB = 0;
 
 Carte plateau;
 
@@ -90,11 +93,20 @@ int verifJouer(Carte c, Carte plateau){
     return a;
 }
 
-void afficherMain() {
+void afficherMainJ() {
     printf("\n  ");
     for(int i = 0; i < nCartesJ; i++) {
         printf(" | %d : ", i + 1);
         afficher_carte(mainJoueur[i]);
+    }
+    printf(" | \n");
+}
+
+void afficherMainB() {
+    printf("\n  ");
+    for(int i = 0; i < nCartesB; i++) {
+        printf(" | %d : ", i + 1);
+        afficher_carte(mainBot[i]);
     }
     printf(" | \n");
 }
@@ -165,14 +177,24 @@ int main() {
         reste--;
     }
 
+    for (int i = 1; i <= NBR_DISTRIBUER; i++) {
+        Carte c = generationCarte();
+        mainBot[nCartesB] = c;
+        nCartesB++;
+    }
+    
     printf("\n \nVotre jeu:  \n");
-    afficherMain();
+    afficherMainJ();
+    printf("\n");
+
+    printf("Jeu du Bot:  \n");
+    afficherMainB();
     printf("\n");
 
     plateau = PremiereCarte();
     printf("Première carte:  ");
     afficher_carte(plateau);
-    printf("\n");
+    printf("\n \n");
 
     while(nCartesJ > 0) {
 
@@ -186,21 +208,21 @@ int main() {
         int verif = verifJouer(carteChoisie, plateau);
 
         if(verif != 0){
-            printf("\n Vous avez choisie la carte suivante:");
+            printf("\n Vous avez choisie la carte suivante:  ");
             afficher_carte(carteChoisie);
             
             mainJoueur[choixJ] = mainJoueur[nCartesJ - 1]; 
             nCartesJ--;
 
-            afficherMain();
-
-            
+            printf("\n \nVotre jeu:  \n");
+            afficherMainJ();
+            printf("\n");
 
         }else{
             printf("\n Pas possible de jouer cette carte, vous piocher.");
-            
-            afficherMain();
-
+            generationCarte();
+            afficherMainJ();
+            printf("\n");
         }
     }      
 
