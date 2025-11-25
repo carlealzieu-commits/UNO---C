@@ -77,7 +77,7 @@ void gestionReste (int type) {
 
 
 int verifJouer(Carte c, Carte plateau){
-    int a;
+    int a = 0;
     if(c.type == JOKER || plateau.type == PLUS4){
         a = 1;
     }
@@ -93,9 +93,15 @@ int verifJouer(Carte c, Carte plateau){
     if(c.type == CHIFFRE && plateau.type == CHIFFRE && c.valeur == plateau.valeur){
         a = 4;
     }
+    return a;
+}
 
-    
-    return a
+void afficherMain() {
+    printf("\n");
+    for(int i = 0; i < nCartesJ; i++) {
+        printf("%d : ", i + 1);
+        afficher_carte(mainJoueur[i]);
+    }
 }
 
 int main() {
@@ -120,11 +126,11 @@ int main() {
             type = (enum TypeCarte) rd_type;
 
             if (type == CHIFFRE && rChiffre > 0) break;
-            if (type == PLUS2   && rPlus2 > 0)   break;
+            if (type == PLUS2 && rPlus2 > 0)   break;
             if (type == INVERSION && rInversion > 0) break;
-            if (type == PASSER  && rPasser > 0)  break;
-            if (type == JOKER   && rJoker > 0)   break;
-            if (type == PLUS4   && rPlus4 > 0)   break;
+            if (type == PASSER && rPasser > 0)  break;
+            if (type == JOKER && rJoker > 0)   break;
+            if (type == PLUS4 && rPlus4 > 0)   break;
 
         }
 
@@ -173,6 +179,21 @@ int main() {
     choixJ--;
     Carte carteChoisie = mainJoueur[choixJ];
 
+    int verif = verifJouer(carteChoisie, plateau);
+
+    if(verif != 0){
+        printf("\n Vous avez choisie la carte suivante:");
+        afficher_carte(carteChoisie);
+        
+        mainJoueur[choixJ] = mainJoueur[nCartesJ - 1]; 
+        nCartesJ--;
+
+        afficherMain();
+
+    }else{
+        printf("\n Vous ne pouvez pas jouer cette carte");
+    
+    }
 
     return 0;
 }
