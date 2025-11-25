@@ -74,7 +74,8 @@ void gestionReste (int type) {
 
 int verifJouer(Carte c, Carte plateau){
     int a = 0;
-    if(c.type == JOKER || plateau.type == PLUS4){
+    
+    if(c.type == JOKER || c.type == PLUS4){
         a = 1;
     }
 
@@ -207,6 +208,7 @@ int main() {
 
         int verif = verifJouer(carteChoisie, plateau);
 
+
         if(verif != 0){
             printf("\n Vous avez choisie la carte suivante:  ");
             afficher_carte(carteChoisie);
@@ -227,7 +229,9 @@ int main() {
             printf("\n");
         }
 
-        
+        plateau = carteChoisie;
+        int aJoue = 0;
+
         printf("Au tour du Bot... ");
         for(int i = 0; i < nCartesB; i++ ){
             
@@ -244,11 +248,13 @@ int main() {
             printf("\n \nLe jeu du Bot:  \n");
             afficherMainB();
             printf("\n");
+            aJoue = 1;
             break;
 
-
-            }else{
-
+            }
+        }
+        
+        if(aJoue == 0) {
             printf("\n Le bot ne peut pas jouer il pioche");
             Carte cb = generationCarte();
             afficherMainB();
@@ -256,7 +262,8 @@ int main() {
             nCartesB++;
             printf("\n");
         }
-        }
+        
+        
 
     }      
 
