@@ -13,3 +13,8 @@ typedef struct {
 } Carte;
 
 void afficher_carte(Carte c);
+
+
+
+
+

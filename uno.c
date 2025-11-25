@@ -20,8 +20,6 @@ Carte mainBot[108];
 int nCartesJ = 0; 
 int nCartesB = 0;
 
-int passerTour = 0;
-
 Carte plateau;
 
 int rChiffre = MAX_CHIFFRE;
@@ -31,7 +29,7 @@ int rPasser = MAX_PASSER;
 int rJoker = MAX_JOKER;
 int rPlus4 = MAX_PLUS4;
 
-Carte cartePlateau() {
+Carte PremiereCarte() {
     Carte c;
 
     c.type = CHIFFRE;
@@ -98,8 +96,8 @@ int verifJouer(Carte c, Carte plateau){
 
 void afficherMainJ() {
     printf("\n  ");
-    for(int i = 0; i < nCartesJ; i++) {
-        printf(" | %d : ", i + 1);
+    for(int i = 1; i < nCartesJ; i++) {
+        printf(" | %d : ", i);
         afficher_carte(mainJoueur[i]);
     }
     printf(" | \n");
@@ -107,8 +105,8 @@ void afficherMainJ() {
 
 void afficherMainB() {
     printf("\n  ");
-    for(int i = 0; i < nCartesB; i++) {
-        printf(" | %d : ", i + 1);
+    for(int i = 1; i < nCartesB; i++) {
+        printf(" | %d : ", i);
         afficher_carte(mainBot[i]);
     }
     printf(" | \n");
@@ -186,17 +184,16 @@ int main() {
         nCartesB++;
     }
     
-    
     int d = 0;
 
-    plateau = cartePlateau();
-    printf("n Carte Plateau:  ");
+    plateau = PremiereCarte();
+    printf("\nPremière carte:  ");
     afficher_carte(plateau);
-    
-    while(nCartesJ > 0 || nCartesB > 0) {
 
-        int choixJ = 0;
-        
+
+    while(nCartesJ > 0 || nCartesB>0) {
+
+
         if(d == 1){
             system("clear");
         }
@@ -211,6 +208,7 @@ int main() {
         afficherMainB();
         printf("\n");
 
+        int choixJ = 0;
         printf("Qu'est ce que vous voulez jouer ? ");
         scanf("%d", &choixJ);
         choixJ--;
@@ -218,107 +216,60 @@ int main() {
 
         int verif = verifJouer(carteChoisie, plateau);
 
-        if (passerTour == 0) {
-            if(verif != 0){
 
-                printf("\n Vous avez choisie la carte suivante:  ");
-                afficher_carte(carteChoisie);
-                
-                mainJoueur[choixJ] = mainJoueur[nCartesJ - 1]; 
-                nCartesJ--;
+        if(verif != 0){
+            printf("\n Vous avez choisie la carte suivante:  ");
+            afficher_carte(carteChoisie);
+            
+            mainJoueur[choixJ] = mainJoueur[nCartesJ - 1]; 
+            nCartesJ--;
 
-                printf("\n \nVotre jeu:  \n");
-                afficherMainJ();
-                printf("\n");
-
-            }else{
-                printf("\n Pas possible de jouer cette carte, vous piocher.");
-                Carte c = generationCarte();
-                afficherMainJ();
-                mainJoueur[nCartesJ] = c;
-                nCartesJ++;
-                printf("\n");
-            }
-
-            if(carteChoisie.type == PLUS2){
-                for(int i = 0; i < 2; i++){
-                    Carte cb = generationCarte();
-                    mainBot[nCartesB] = cb;
-                    nCartesB++;
-                }
-            }
-
-            if(carteChoisie.type == PASSER || carteChoisie.type == INVERSION){
-                passerTour = 1;
-            }
+            printf("\n \nVotre jeu:  \n");
+            afficherMainJ();
+            printf("\n");
 
         }else{
-
-            printf("Le Joueur passe son tour ");
-            passerTour = 0;
+            printf("\n Pas possible de jouer cette carte, vous piocher.");
+            Carte c = generationCarte();
+            afficherMainJ();
+            mainJoueur[nCartesJ] = c;
+            nCartesJ++;
+            printf("\n");
         }
-
 
         plateau = carteChoisie;
-        Carte carteChoisieB;
-        int aJoue = 0;
-        
-        if (passerTour == 0) {
+        printf("\nCarte Plateau:  ");
+        afficher_carte(plateau);
 
-            printf("Au tour du Bot... ");
-            for(int i = 0; i < nCartesB; i++ ){
-                
-                Carte carteChoisieB = mainBot[i];
-                int verif = verifJouer(carteChoisieB, plateau);
 
-                if(verif != 0){
-
-                    printf("\n Le bot joue :  ");
-                    afficher_carte(carteChoisieB);
-                    
-                    mainBot[i] = mainBot[nCartesB - 1]; 
-                    nCartesB--;
-
-                    printf("\n \nLe jeu du Bot:  \n");
-                    afficherMainB();
-                    printf("\n");
-                    aJoue = 1;
-                    break;
-
-                }
-            }
+        printf("Au tour du Bot... ");
+        for(int i = 0; i < nCartesB; i++ ){
             
-            if(aJoue == 0) {
+            Carte carteChoisieB = mainBot[i];
+            int verif = verifJouer(carteChoisieB, plateau);
 
-                printf("\n Le bot ne peut pas jouer il pioche");
-                Carte cb = generationCarte();
-                afficherMainB();
-                mainBot[nCartesB] = cb;
-                nCartesB++;
-                printf("\n");
+            if(verif != 0){
+            printf("\n Le bot joue :  ");
+            afficher_carte(carteChoisieB);
+            
+            mainBot[i] = mainBot[nCartesB - 1]; 
+            nCartesB--;
 
+            printf("\n \nLe jeu du Bot:  \n");
+            afficherMainB();
+            printf("\n");
+            break;
+            
             }else{
-
-                if(carteChoisieB.type == PLUS2){
-                    
-                    for(int i = 0; i < 2; i++){
-                        Carte cb = generationCarte();
-                        mainBot[nCartesB] = cb;
-                        nCartesB++;
-                    }
-                }
-
-                if(carteChoisieB.type == PASSER || carteChoisieB.type == INVERSION){
-                    passerTour = 1;
-                }
-            
-        }else{
-                printf("Le Bot passe son tour ");
-                passerTour = 0;
+            printf("\n Le bot ne peut pas jouer il pioche");
+            Carte cb = generationCarte();
+            afficherMainB();
+            mainBot[nCartesB] = cb;
+            nCartesB++;
+            printf("\n");
+            }
         }
-    }
-
-          
+    }      
 
     if (nCartesJ ==0 ){
         printf("Le joueur a gagné !!");
