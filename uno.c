@@ -2,6 +2,8 @@
 #include <stdlib.h>
 #include <time.h>
 #include "cartes.h"
+#include <unistd.h>
+
 
 #define NBR_DISTRIBUER 7
 #define MAX_CARTES 108
@@ -140,13 +142,21 @@ int main() {
     int carte_jouer = 0;
     int reste = MAX_CARTES;
 
+    system("clear");
+
+    printf("------------------\n");
+    printf("Le Uno va commencé\n");
+    printf("------------------\n");
+    
+    printf("Distribution des cartes...");
+
     for (int i = 1; i <= NBR_DISTRIBUER; i++) {
 
         if (reste <= 0 || carte_jouer >= MAX_CARTES) {
             printf("Plus de cartes \n");
             break;
         }
-        
+
         Carte c = generationCarte();
     
         mainJoueur[nCartesJ] = c;
@@ -155,12 +165,10 @@ int main() {
         reste--;
     }
 
-    printf("\n");
+    printf("\n \nVotre jeu:  \n");
     afficherMain();
     printf("\n");
-    printf("Reste: %d\n", reste);
 
-    printf("\n");
     plateau = PremiereCarte();
     printf("Première carte:  ");
     afficher_carte(plateau);
@@ -170,8 +178,6 @@ int main() {
 
         int choixJ = 0;
 
-        printf("\n");
-        printf("\n");
         printf("Qu'est ce que vous voulez jouer ? ");
         scanf("%d", &choixJ);
         choixJ--;
