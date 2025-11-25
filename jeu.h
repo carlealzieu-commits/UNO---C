@@ -2,7 +2,5 @@
 #define JEU_H
 
 #include "cartes.h"
-#include "joueur.h"
-
 
 #endif

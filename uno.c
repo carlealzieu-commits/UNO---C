@@ -24,24 +24,15 @@ int rPasser = MAX_PASSER;
 int rJoker = MAX_JOKER;
 int rPlus4 = MAX_PLUS4;
 
-void afficherReste() {
-    printf("CHIFFRE   : %d\n", rChiffre);
-    printf("PLUS2     : %d\n", rPlus2);
-    printf("INVERSION : %d\n", rInversion);
-    printf("PASSER    : %d\n", rPasser);
-    printf("JOKER     : %d\n", rJoker);
-    printf("PLUS4     : %d\n", rPlus4);
+Carte PremiereCarte() {
+    Carte c;
+
+    c.type = CHIFFRE;
+    c.couleur = (enum Couleur)(rand() % 4);
+    c.valeur = rand() % 10;
+
+    return c;
 }
-
-    Carte PremiereCarte() {
-        Carte c;
-
-        c.type = CHIFFRE;
-        c.couleur = (enum Couleur)(rand() % 4);
-        c.valeur = rand() % 10;
-
-        return c;
-    }
 
 void gestionReste (int type) {
     switch (type) {
@@ -97,20 +88,46 @@ int verifJouer(Carte c, Carte plateau){
 }
 
 void afficherMain() {
-    printf("\n");
+    printf("\n   ");
     for(int i = 0; i < nCartesJ; i++) {
-        printf("%d : ", i + 1);
+        printf(" |  %d : ", i + 1);
         afficher_carte(mainJoueur[i]);
     }
 }
 
+void piocher() {
+    Carte p;
+
+    int rd_type = rand() % 6;
+    p.type = (enum TypeCarte) rd_type;
+
+    if(p.type == JOKER || p.type == PLUS4){
+        p.couleur = NOIR;
+        p.valeur = 0;
+    }
+    else {
+        p.couleur = (enum Couleur)(rand() % 4);
+
+        if(p.type == CHIFFRE)
+            p.valeur = rand() % 10;
+        else
+            p.valeur = 0;
+    }
+
+    mainJoueur[nCartesJ] = p;
+    nCartesJ++;
+
+    printf("\n Carte piocher:");
+    afficher_carte(p);
+}
+
 int main() {
+    
     srand(time(NULL));
 
     int carte_jouer = 0;
     int reste = MAX_CARTES;
 
-    printf("Reste : %d\n", reste);
 
     for (int i = 1; i <= NBR_DISTRIBUER; i++) {
 
@@ -138,7 +155,6 @@ int main() {
 
         Carte c;
         c.type = type;
-        c.couleur = couleur;
         c.valeur = 0;
 
         if (type == JOKER || type == PLUS4) {
@@ -147,6 +163,8 @@ int main() {
             int rd_couleur = rand() % 4; 
             couleur = (enum Couleur) rd_couleur;
         }
+        
+        c.couleur = couleur;
 
         if (type == CHIFFRE) {
             c.valeur = rand() % 10;
@@ -165,6 +183,7 @@ int main() {
         
         
     }
+
     printf("Reste: %d\n", reste);
 
     plateau = PremiereCarte();
@@ -172,28 +191,32 @@ int main() {
     afficher_carte(plateau);
     printf("\n");
 
-    int choixJ = 0;
+    while(nCartesJ > 0) {
 
-    printf("\n Qu'est ce que vous voulez jouer ? ");
-    scanf("%d", &choixJ);
-    choixJ--;
-    Carte carteChoisie = mainJoueur[choixJ];
+        int choixJ = 0;
 
-    int verif = verifJouer(carteChoisie, plateau);
+        printf("\n Qu'est ce que vous voulez jouer ? ");
+        scanf("%d", &choixJ);
+        choixJ--;
+        Carte carteChoisie = mainJoueur[choixJ];
 
-    if(verif != 0){
-        printf("\n Vous avez choisie la carte suivante:");
-        afficher_carte(carteChoisie);
-        
-        mainJoueur[choixJ] = mainJoueur[nCartesJ - 1]; 
-        nCartesJ--;
-
+        int verif = verifJouer(carteChoisie, plateau);
         afficherMain();
 
-    }else{
-        printf("\n Vous ne pouvez pas jouer cette carte");
-    
-    }
+        if(verif != 0){
+            printf("\n Vous avez choisie la carte suivante:");
+            afficher_carte(carteChoisie);
+            
+            mainJoueur[choixJ] = mainJoueur[nCartesJ - 1]; 
+            nCartesJ--;
+
+            
+
+        }else{
+            printf("\n Vous ne pouvez pas jouer cette carte");
+            piocher();
+        }
+    }      
 
     return 0;
 }
