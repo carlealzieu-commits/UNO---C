@@ -75,6 +75,29 @@ void gestionReste (int type) {
     }
 }
 
+
+int verifJouer(Carte c, Carte plateau){
+    int a;
+    if(c.type == JOKER || plateau.type == PLUS4){
+        a = 1;
+    }
+
+    if(c.couleur == plateau.couleur){
+        a = 2;
+    }
+
+    if(c.type == plateau.type && c.type != CHIFFRE && plateau.type != CHIFFRE){
+        a = 3;
+    }
+
+    if(c.type == CHIFFRE && plateau.type == CHIFFRE && c.valeur == plateau.valeur){
+        a = 4;
+    }
+
+    
+    return a
+}
+
 int main() {
     srand(time(NULL));
 
@@ -107,17 +130,17 @@ int main() {
 
         enum Couleur couleur;
 
+        Carte c;
+        c.type = type;
+        c.couleur = couleur;
+        c.valeur = 0;
+
         if (type == JOKER || type == PLUS4) {
             couleur = NOIR; 
         } else {
             int rd_couleur = rand() % 4; 
             couleur = (enum Couleur) rd_couleur;
         }
-
-        Carte c;
-        c.type = type;
-        c.couleur = couleur;
-        c.valeur = 0;
 
         if (type == CHIFFRE) {
             c.valeur = rand() % 10;
@@ -143,7 +166,13 @@ int main() {
     afficher_carte(plateau);
     printf("\n");
 
-    
+    int choixJ = 0;
+
+    printf("\n Qu'est ce que vous voulez jouer ? ");
+    scanf("%d", &choixJ);
+    choixJ--;
+    Carte carteChoisie = mainJoueur[choixJ];
+
 
     return 0;
 }
