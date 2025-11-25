@@ -12,6 +12,11 @@
 #define MAX_JOKER 4
 #define MAX_PLUS4 4
 
+Carte mainJoueur[20];
+int nCartesJ = 0; 
+
+Carte plateau;
+
 int rChiffre = MAX_CHIFFRE;
 int rPlus2 = MAX_PLUS2;
 int rInversion = MAX_INVERSION;
@@ -27,6 +32,16 @@ void afficherReste() {
     printf("JOKER     : %d\n", rJoker);
     printf("PLUS4     : %d\n", rPlus4);
 }
+
+    Carte PremiereCarte() {
+        Carte c;
+
+        c.type = CHIFFRE;
+        c.couleur = (enum Couleur)(rand() % 4);
+        c.valeur = rand() % 10;
+
+        return c;
+    }
 
 void gestionReste (int type) {
     switch (type) {
@@ -74,7 +89,7 @@ int main() {
             printf("Plus de cartes \n");
             break;
         }
-
+        
         enum TypeCarte type;
         while (1) {
 
@@ -115,9 +130,20 @@ int main() {
         gestionReste(type);
         carte_jouer++;
         reste--;
-    }
 
+        mainJoueur[nCartesJ] = c;
+        nCartesJ++;
+        
+        
+    }
     printf("Reste: %d\n", reste);
+
+    plateau = PremiereCarte();
+    printf("Première carte:  ");
+    afficher_carte(plateau);
+    printf("\n");
+
+    
 
     return 0;
 }
