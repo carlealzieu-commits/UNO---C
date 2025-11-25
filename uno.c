@@ -191,7 +191,7 @@ int main() {
     afficher_carte(plateau);
 
 
-    while(nCartesJ > 0 || nCartesB>0) {
+    while(nCartesJ > 0 && nCartesB>0) {
 
 
         if(d == 1){
@@ -268,6 +268,7 @@ int main() {
             nCartesB++;
             printf("\n");
             }
+            
         }
     }      
 
