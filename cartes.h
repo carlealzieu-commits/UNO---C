@@ -1,11 +1,5 @@
 #pragma once
 
-#define MAX_COULEUR 76
-#define MAX_PLUS2 8
-#define MAX_INVERSION 8
-#define MAX_PASSER 8
-#define MAX_JOKER 4
-#define MAX_PLUS4 4
 
 
 enum Couleur { ROUGE, JAUNE, BLEU, VERT, NOIR };
@@ -19,4 +13,3 @@ typedef struct {
 } Carte;
 
 void afficher_carte(Carte c);
-

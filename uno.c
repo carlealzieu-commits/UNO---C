@@ -2,9 +2,8 @@
 #include <stdlib.h>
 #include <time.h>
 #include "cartes.h"
-#include "joueur.h"
 
-#define nbrDistribuer 7
+#define NBR_DISTRIBUER 7
 #define MAX_CARTES 108
 #define MAX_CHIFFRE 76
 #define MAX_PLUS2 8
@@ -12,7 +11,6 @@
 #define MAX_PASSER 8
 #define MAX_JOKER 4
 #define MAX_PLUS4 4
-
 
 int rChiffre = MAX_CHIFFRE;
 int rPlus2 = MAX_PLUS2;
@@ -31,82 +29,95 @@ void afficherReste() {
 }
 
 void gestionReste (int type) {
-        switch (type) {
+    switch (type) {
 
         case CHIFFRE:
-            rChiffre --;
-        break;
+            rChiffre--;
+            break;
 
         case PLUS2:
-            rPlus2 --;
-        break;
+            rPlus2--;
+            break;
 
         case INVERSION:
-            rInversion --;
-        break;
+            rInversion--;
+            break;
 
         case PASSER:
-            rPasser --;
-        break;
+            rPasser--;
+            break;
 
         case JOKER:
-            rJoker --;
-        break;
+            rJoker--;
+            break;
 
         case PLUS4:
-            rPlus4 --;
-        break;
+            rPlus4--;
+            break;
 
         default:
+            break;
     }
-        
 }
 
 int main() {
-    
     srand(time(NULL));
-    
+
     int carte_jouer = 0;
-    int reste = 108;
+    int reste = MAX_CARTES;
 
-    printf("%d ", reste);
+    printf("Reste : %d\n", reste);
 
-    int i;
-    for (i = 1; i <= nbrDistribuer; i++) {
-        if((carte_jouer < MAX_CARTES) && (rChiffre > 0) && (rPlus2 > 0) && (rInversion > 0) && (rPasser > 0)&& (rPlus4 > 0)){
+    for (int i = 1; i <= NBR_DISTRIBUER; i++) {
+
+        if (reste <= 0 || carte_jouer >= MAX_CARTES) {
+            printf("Plus de cartes \n");
+            break;
+        }
+
+        enum TypeCarte type;
+        while (1) {
 
             int rd_type = rand() % 6;
-            enum TypeCarte type;
-            type = rd_type;
-            
-            
-            int rd_Carte = rand() % 5;
-            enum Couleur couleur;
-            couleur = rd_Carte;
+            type = (enum TypeCarte) rd_type;
 
-            Carte c;
-            c.type = type;
-            c.couleur = couleur;
+            if (type == CHIFFRE && rChiffre > 0) break;
+            if (type == PLUS2   && rPlus2 > 0)   break;
+            if (type == INVERSION && rInversion > 0) break;
+            if (type == PASSER  && rPasser > 0)  break;
+            if (type == JOKER   && rJoker > 0)   break;
+            if (type == PLUS4   && rPlus4 > 0)   break;
 
-            if (type == CHIFFRE) {
-                c.valeur = rand() % 10; 
-            }
-
-            printf("%d : ", i);
-            afficher_carte(c);
-            printf("\n");
-
-            gestionReste(type);
-            
-            carte_jouer ++;
-            reste --; 
         }
-        printf("%d ", reste);
+
+        enum Couleur couleur;
+
+        if (type == JOKER || type == PLUS4) {
+            couleur = NOIR; 
+        } else {
+            int rd_couleur = rand() % 4; 
+            couleur = (enum Couleur) rd_couleur;
+        }
+
+        Carte c;
+        c.type = type;
+        c.couleur = couleur;
+        c.valeur = 0;
+
+        if (type == CHIFFRE) {
+            c.valeur = rand() % 10;
+        }
+
+        printf("%d : ", i);
+        afficher_carte(c);
+        printf("\n");
+
+        gestionReste(type);
+        carte_jouer++;
+        reste--;
     }
 
-
-
-    
+    printf("Reste: %d\n", reste);
 
     return 0;
 }
