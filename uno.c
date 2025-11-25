@@ -178,8 +178,8 @@ int main() {
     }
 
     for (int i = 1; i <= NBR_DISTRIBUER; i++) {
-        Carte c = generationCarte();
-        mainBot[nCartesB] = c;
+        Carte cb = generationCarte();
+        mainBot[nCartesB] = cb;
         nCartesB++;
     }
     
@@ -199,7 +199,7 @@ int main() {
     while(nCartesJ > 0) {
 
         int choixJ = 0;
-
+        printf("C'est votre tour: ");
         printf("Qu'est ce que vous voulez jouer ? ");
         scanf("%d", &choixJ);
         choixJ--;
@@ -220,10 +220,44 @@ int main() {
 
         }else{
             printf("\n Pas possible de jouer cette carte, vous piocher.");
-            generationCarte();
+            Carte c = generationCarte();
             afficherMainJ();
+            mainJoueur[nCartesJ] = c;
+            nCartesJ++;
             printf("\n");
         }
+
+        
+        printf("Au tour du Bot... ");
+        for(int i = 0; i < nCartesB; i++ ){
+            
+            Carte carteChoisie = mainBot[i];
+            int verif = verifJouer(carteChoisie, plateau);
+
+            if(verif != 0){
+            printf("\n Le bot joue :  ");
+            afficher_carte(carteChoisie);
+            
+            mainBot[i] = mainBot[nCartesB - 1]; 
+            nCartesB--;
+
+            printf("\n \nLe jeu du Bot:  \n");
+            afficherMainB();
+            printf("\n");
+            break;
+
+
+            }else{
+
+            printf("\n Le bot ne peut pas jouer il pioche");
+            Carte cb = generationCarte();
+            afficherMainB();
+            mainBot[nCartesB] = cb;
+            nCartesB++;
+            printf("\n");
+        }
+        }
+
     }      
 
     return 0;
