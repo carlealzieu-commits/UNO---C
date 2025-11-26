@@ -3,7 +3,7 @@
 
 void afficher_carte(Carte c) {
 
-    const char *couleurs = "RJBVN";
+    char couleurs[] = {'R', 'J', 'B', 'V', 'N'};
 
     switch(c.type) {
 
