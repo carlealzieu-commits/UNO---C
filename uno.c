@@ -86,7 +86,7 @@ int verifJouer(Carte c, Carte plateau){
     if(c.type == plateau.type && c.type != CHIFFRE && plateau.type != CHIFFRE){
         a = 1;
     }
-
+    
     if(c.type == CHIFFRE && plateau.type == CHIFFRE && c.valeur == plateau.valeur){
         a = 1;
     }
@@ -96,18 +96,18 @@ int verifJouer(Carte c, Carte plateau){
 
 void afficherMainJ() {
     printf("\n  ");
-    for(int i = 1; i < nCartesJ; i++) {
+    for(int i = 0; i < nCartesJ; i++) {
         printf(" | %d : ", i);
-        afficher_carte(mainJoueur[i]);
+        afficher_carte(mainJoueur[i+1]);
     }
     printf(" | \n");
 }
 
 void afficherMainB() {
     printf("\n  ");
-    for(int i = 1; i < nCartesB; i++) {
+    for(int i = 0; i < nCartesB; i++) {
         printf(" | %d : ", i);
-        afficher_carte(mainBot[i]);
+        afficher_carte(mainBot[i+1]);
     }
     printf(" | \n");
 }
@@ -209,8 +209,11 @@ int main() {
         printf("\n");
 
         int choixJ = 0;
+        do{
         printf("Qu'est ce que vous voulez jouer ? ");
         scanf("%d", &choixJ);
+        }while(choixJ < 0 || choixJ >= nCartesJ);
+
         choixJ--;
         Carte carteChoisie = mainJoueur[choixJ];
 
@@ -240,36 +243,44 @@ int main() {
         plateau = carteChoisie;
         printf("\nCarte Plateau:  ");
         afficher_carte(plateau);
-
-
+        
+        int bJoue = 0;
+        Carte carteChoisieB; 
+        
         printf("Au tour du Bot... ");
         for(int i = 0; i < nCartesB; i++ ){
             
-            Carte carteChoisieB = mainBot[i];
+            carteChoisieB = mainBot[i];
             int verif = verifJouer(carteChoisieB, plateau);
 
             if(verif != 0){
-            printf("\n Le bot joue :  ");
-            afficher_carte(carteChoisieB);
-            
-            mainBot[i] = mainBot[nCartesB - 1]; 
-            nCartesB--;
+                printf("\n Le bot joue :  ");
+                afficher_carte(carteChoisieB);
+                
+                plateau = carteChoisieB;
 
-            printf("\n \nLe jeu du Bot:  \n");
-            afficherMainB();
-            printf("\n");
-            break;
+                mainBot[i] = mainBot[nCartesB - 1]; 
+                nCartesB--;
+    
+                printf("\n \nLe jeu du Bot:  \n");
+                afficherMainB();
+                printf("\n");
+                bJoue = 1;
+                break;
             
-            }else{
+            }
+        }
+            
+        if(bJoue == 0){
             printf("\n Le bot ne peut pas jouer il pioche");
             Carte cb = generationCarte();
             afficherMainB();
             mainBot[nCartesB] = cb;
             nCartesB++;
             printf("\n");
-            }
-            
         }
+        
+
     }      
 
     if (nCartesJ ==0 ){
